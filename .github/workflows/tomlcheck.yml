@@ -1,0 +1,18 @@
+name: 'tomlcheck'
+on:
+  push:
+    paths:
+      - '**.toml'
+
+jobs:
+  tomlcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Check TOML syntax
+        run: |
+          echo 'import sys, toml; cfg = toml.load(sys.argv[1])' > tomlcheck.py
+          find . -type f -name '*.toml' | xargs -L1 python tomlcheck.py
