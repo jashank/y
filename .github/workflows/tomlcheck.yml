@@ -19,4 +19,4 @@ jobs:
       - name: Check TOML syntax
         run: |
           echo 'import sys, toml; cfg = toml.load(sys.argv[1])' > tomlcheck.py
-          find . -type f -name '*.toml' | xargs -L1 python tomlcheck.py
+          find . -type f -name '*.toml' | xargs -t -L1 python tomlcheck.py
