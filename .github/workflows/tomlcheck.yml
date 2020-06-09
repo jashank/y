@@ -17,6 +17,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install toml
       - name: Check TOML syntax
+        shell: python
         run: |
-          echo 'import sys, toml; cfg = toml.load(sys.argv[1])' > tomlcheck.py
-          find . -type f -name '*.toml' | xargs -t -L1 python tomlcheck.py
+          import sys, glob, toml
+          for file in glob.glob('**.toml'):
+              try:
+                  x = toml.load(file)
+              except toml.decoder.TomlDecodeError:
+                  e = str(sys.exc_info()[1])
+                  mx = re.match('(.*) \(line (\d+) column (\d+) char (\d+)\)', e)
+                  message, line, col, byte = mx.groups()
+                  print(f'::error file={file},line={line},col={col}::{message}')
