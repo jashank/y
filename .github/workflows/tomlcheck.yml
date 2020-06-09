@@ -19,7 +19,7 @@ jobs:
       - name: Check TOML syntax
         shell: python
         run: |
-          import sys, glob, toml
+          import glob, re, sys, toml
           for file in glob.glob('**.toml'):
               try:
                   x = toml.load(file)
