@@ -20,6 +20,7 @@ jobs:
         shell: python
         run: |
           import glob, re, sys, toml
+          exval = 0
           for file in glob.glob('**.toml'):
               try:
                   x = toml.load(file)
@@ -28,3 +29,5 @@ jobs:
                   mx = re.match('(.*) \(line (\d+) column (\d+) char (\d+)\)', e)
                   message, line, col, byte = mx.groups()
                   print(f'::error file={file},line={line},col={col}::{message}')
+                  exval = 1
+          sys.exit(exval)
